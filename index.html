@@ -3,9 +3,25 @@
 <head>
 	<title>infoBox Demo</title>
 	<script async src="infoBox.js"></script>
+	<script>
+		function demoSimple() {
+			let iBox = new infoBox("Hello, world!");
+			iBox.show();
+		}
+		function demoAllProperties() {
+			let iBox = new infoBox();
+			// The opacity property value must be a number between 0.0 (fully transparent) and 1.0 (fully opaque)
+			iBox.fog.opacity = 0.1;
+			iBox.fog.exist = true;
+			iBox.title.txt = "Hi, world!";
+			iBox.message.txt = "Hello, world!";
+			iBox.show();
+		}
+	</script>
 </head>
 <body>
 	<p>infoBox</p>
-	<button type="button" onclick="demoOK()">Live Demo</button>
+	<button type="button" onclick="demoSimple()">Live Demo Simple</button>
+	<button type="button" onclick="demoAllProperties()">Live Demo All Properties</button>
 </body>
 </html>
