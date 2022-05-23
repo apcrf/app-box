@@ -25,13 +25,13 @@
 				width: 500px;
 				max-width: 100vw;
 				max-height: 90vh;
-				pointer-events: none;
 				border-radius: 0.3rem;
 				background: White;
 			"
 		>
 			<!-- header -->
 			<div style="
+					display: flex;
 					border-bottom: 1px solid LightGrey;
 				"
 			>
@@ -39,30 +39,107 @@
 				<h1 style="
 						overflow: hidden;
 						margin: 0.5rem;
-						font-size: 1.6rem;
+						font-size: 1.5rem;
 					"
 				>
 					Aaaaaaaaaaaaaaaaaa
 				</h1>
+				<!-- btnClose -->
+				<button type="button" onclick="console.log('Close')" style="
+						margin-left: auto;
+						cursor: pointer;
+						padding: 0.3rem 0.7rem;
+						user-select: none;
+						border: 1px solid transparent;
+						color: DimGrey;
+						background-color: transparent;
+					"
+				>
+					<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 352 552" fill="currentColor" style="
+							height: 1.6rem;
+							vertical-align: middle;
+							padding-top: 0.2rem;
+						"
+					>
+						<path d="M242.72 256l100.07-100.07c12.28-12.28 12.28-32.19 0-44.48l-22.24-22.24c-12.28-12.28-32.19-12.28-44.48 0L176 189.28 75.93 89.21c-12.28-12.28-32.19-12.28-44.48 0L9.21 111.45c-12.28 12.28-12.28 32.19 0 44.48L109.28 256 9.21 356.07c-12.28 12.28-12.28 32.19 0 44.48l22.24 22.24c12.28 12.28 32.2 12.28 44.48 0L176 322.72l100.07 100.07c12.28 12.28 32.2 12.28 44.48 0l22.24-22.24c12.28-12.28 12.28-32.19 0-44.48L242.72 256z">
+						</path>
+					</svg>
+				</button>
+
 			</div>
 			<!-- body -->
 			<div style="
+					margin: 0.5rem;
 					word-break: break-word;
 				"
 			>
 				Qqqqqq<br>
 				Wwwwwwwww<br>
 				Eeeeeeeeeeeeeee<br>
-				Rrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrr<br>
+				Rrrrrrrrrrrrrrrrrrrr Rrrrrrrrrrrrrrrrrrrrrr<br>
 				Mmmmmmmmmmmmm Mmmmmmmmmmmmmmmmmmmmmmmmmm Mmmmmmmmmmmmmmmmmmmmmmmmmmmmm<br>
 			</div>
 			<!-- footer -->
 			<div style="
+					display: flex;
 					border-top: 1px solid LightGrey;
-					overflow: hidden;
 				"
 			>
-				Bbbbbbbbbbbbbbbbbbb
+
+				<!-- btnClose -->
+				<button type="button" onclick="console.log('Close')" style="
+						margin: 0.4rem;
+						margin-left: auto;
+						cursor: pointer;
+						padding: 0.3rem 0.6rem;
+						user-select: none;
+						font-size: 1.1rem;
+						line-height: 1.6;
+						border: 1px solid SlateGrey;
+						border-radius: 0.3rem;
+						color: White;
+						background-color: SlateGrey;
+					"
+				>
+					<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 352 552" fill="currentColor" style="
+							height: 1.6rem;
+							vertical-align: middle;
+							padding-bottom: 0.1rem;
+						"
+					>
+						<path d="M242.72 256l100.07-100.07c12.28-12.28 12.28-32.19 0-44.48l-22.24-22.24c-12.28-12.28-32.19-12.28-44.48 0L176 189.28 75.93 89.21c-12.28-12.28-32.19-12.28-44.48 0L9.21 111.45c-12.28 12.28-12.28 32.19 0 44.48L109.28 256 9.21 356.07c-12.28 12.28-12.28 32.19 0 44.48l22.24 22.24c12.28 12.28 32.2 12.28 44.48 0L176 322.72l100.07 100.07c12.28 12.28 32.2 12.28 44.48 0l22.24-22.24c12.28-12.28 12.28-32.19 0-44.48L242.72 256z">
+						</path>
+					</svg>
+					Close
+				</button>
+
+				<!-- btnOK -->
+				<button type="button" onclick="console.log('OK')" style="
+						margin: 0.4rem;
+						margin-left: auto;
+						cursor: pointer;
+						padding: 0.3rem 0.6rem;
+						user-select: none;
+						font-size: 1.1rem;
+						line-height: 1.6;
+						border: 1px solid DodgerBlue;
+						border-radius: 0.3rem;
+						color: White;
+						background-color: DodgerBlue;
+					"
+				>
+					<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 352 552" fill="currentColor" style="
+							height: 1.6rem;
+							vertical-align: middle;
+							padding-bottom: 0.1rem;
+						"
+					>
+						<path d="M242.72 256l100.07-100.07c12.28-12.28 12.28-32.19 0-44.48l-22.24-22.24c-12.28-12.28-32.19-12.28-44.48 0L176 189.28 75.93 89.21c-12.28-12.28-32.19-12.28-44.48 0L9.21 111.45c-12.28 12.28-12.28 32.19 0 44.48L109.28 256 9.21 356.07c-12.28 12.28-12.28 32.19 0 44.48l22.24 22.24c12.28 12.28 32.2 12.28 44.48 0L176 322.72l100.07 100.07c12.28 12.28 32.2 12.28 44.48 0l22.24-22.24c12.28-12.28 12.28-32.19 0-44.48L242.72 256z">
+						</path>
+					</svg>
+					OK
+				</button>
+
 			</div>
 		</div>
 	</div>
