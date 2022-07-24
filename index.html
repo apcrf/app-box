@@ -1,27 +1,468 @@
 <!DOCTYPE html>
 <html>
 <head>
-	<title>infoBox Demo</title>
-	<script async src="infoBox.js"></script>
+	<title>app-box Demo</title>
+	<meta charset="utf-8" />
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<link rel="icon" type="image/x-icon" href="favicon.ico" />
+	<script defer src="app-box.js" type="text/javascript"></script>
 	<script>
-		function demoSimple() {
-			let iBox = new infoBox("Hello, world!");
-			iBox.show();
-		}
-		function demoAllProperties() {
-			let iBox = new infoBox();
-			// The opacity property value must be a number between 0.0 (fully transparent) and 1.0 (fully opaque)
-			iBox.fog.opacity = 0.1;
-			iBox.fog.exist = true;
-			iBox.title.txt = "Hi, world!";
-			iBox.message.txt = "Hello, world!";
-			iBox.show();
-		}
+		document.addEventListener("DOMContentLoaded", function() {
+			var elms = document.getElementsByClassName("divExample");
+			[].forEach.call(elms, function (elm) {
+				//console.log(elm.id);
+				var fb = window[elm.id].toString(); // function
+				fb = fb.match(/\{([\s\S]+)\}/)[1]; // function body
+				fb = fb.trim();
+				fb = fb.replaceAll("\t\t\t", "");
+				var text = fb + "\n"; // for clipboard
+				fb = fb.replaceAll("<", "<font color='Blue'>&lt;");
+				fb = fb.replaceAll(">", "&gt;</font>");
+				fb = fb.replaceAll("\t", "&nbsp;&nbsp;");
+				fb = fb.replaceAll("\n", "<br>");
+				// Element <code>
+				var elmCode = document.createElement("code");
+				elmCode.innerHTML = fb;
+				elm.after(elmCode);
+				// Button [copy to clipboard]
+				var elmBtn = document.createElement("button");
+				elmBtn.classList.add("btnCodeCopy");
+				elmBtn.innerHTML = "<svg viewBox='0 0 448 512' fill='currentColor' style='height: 1.5rem;'><path d='M433.941 65.941l-51.882-51.882A48 48 0 0 0 348.118 0H176c-26.51 0-48 21.49-48 48v48H48c-26.51 0-48 21.49-48 48v320c0 26.51 21.49 48 48 48h224c26.51 0 48-21.49 48-48v-48h80c26.51 0 48-21.49 48-48V99.882a48 48 0 0 0-14.059-33.941zM266 464H54a6 6 0 0 1-6-6V150a6 6 0 0 1 6-6h74v224c0 26.51 21.49 48 48 48h96v42a6 6 0 0 1-6 6zm128-96H182a6 6 0 0 1-6-6V54a6 6 0 0 1 6-6h106v88c0 13.255 10.745 24 24 24h88v202a6 6 0 0 1-6 6zm6-256h-64V48h9.632c1.591 0 3.117.632 4.243 1.757l48.368 48.368a6 6 0 0 1 1.757 4.243V112z'></path></svg>";
+				elmBtn.title = "Copy";
+				elmBtn.addEventListener("click", function(text) { return function() {
+					this.style.color = "Tomato";
+					setTimeout(function(elm) { elm.style.color = "DodgerBlue"; }, 200, this)
+					//navigator.clipboard.writeText("Qqq");
+					if ( document.queryCommandSupported && document.queryCommandSupported("copy") ) {
+						var textarea = document.createElement("textarea");
+						textarea.textContent = text;
+						textarea.style.position = "fixed"; // Prevent scrolling to bottom of page in Microsoft Edge.
+						document.body.appendChild(textarea);
+						textarea.select();
+						try {
+							return document.execCommand("copy"); // Security exception may be thrown by some browsers.
+						}
+						catch (ex) {
+							console.warn("Copy to clipboard failed.", ex);
+							return prompt("Copy to clipboard: Ctrl+C, Enter", text);
+						}
+						finally {
+							document.body.removeChild(textarea);
+						}
+					}
+				}} (text) );
+				elmCode.appendChild(elmBtn);
+			});
+		});
 	</script>
+	<style>
+		body {
+			margin: 15px 30px;
+		}
+        .divExample {
+            display: flex;
+            flex-direction: row;
+			margin-bottom: 10px;
+        }
+		.btnLiveDemo {
+			width: 150px;
+			cursor: pointer;
+			padding: 7px;
+			border: 0;
+			border-radius: 5px;
+			color: White;
+			background-color: DodgerBlue;
+			opacity: 0.8;
+			margin-right: 30px;
+		}
+		.btnLiveDemo:hover {
+			opacity: 1;
+		}
+		.divDescription {
+			align-self: center;
+		}
+		code {
+			position: relative;
+			display: block;
+			word-break: break-word;
+			padding: 15px;
+			border: 1px solid Gainsboro;
+			border-radius: 5px;
+			background-color: AliceBlue;
+			margin-bottom: 40px;
+		}
+		.btnCodeCopy {
+			position: absolute;
+			right: 0;
+			top: 5px;
+			cursor: pointer;
+			border: 0;
+			border-radius: 5px;
+			color: DodgerBlue;
+			background-color: Transparent;
+			opacity: 0.8;
+		}
+		.btnCodeCopy:hover {
+			opacity: 1;
+		}
+		table {
+			border-collapse: collapse;
+		}
+		thead {
+			background-color: WhiteSmoke;
+		}
+		th, td {
+			padding: 10px;
+			border: 1px solid LightGrey;
+		}
+	</style>
 </head>
 <body>
-	<p>infoBox</p>
-	<button type="button" onclick="demoSimple()">Live Demo Simple</button>
-	<button type="button" onclick="demoAllProperties()">Live Demo All Properties</button>
+	<center><h1>app-box</h1></center>
+	<p>
+		<b>app-box</b> - это небольшое модальное окно, появляющееся на экране устройства для информирования пользователя о чем-либо.
+		<br>
+		Модальное окно в графическом интерфейсе блокирует работу пользователя с приложением до тех пор,
+		пока не будет закрыто.
+		<br>
+		<b>app-box</b> не использует дополнительные фреймворки, поэтому без проблем интегрируется в любой сайт.
+		<br><br>
+		Для использования <b>app-box</b> необходимо подключить JS-файл:
+		<br><br>
+		<code>
+			&lt;script defer src="app-box.js" type="text/javascript"&gt;&lt;/script&gt;
+		</code>
+	</p>
+	<center><h3>Свойства, события, методы:</h3></center>
+	<script>
+		document.addEventListener("DOMContentLoaded", function() {
+			var txt = [];
+			var aBox = new appBox();
+			for (var j in aBox.icons) {
+				txt.push('"' + j + '"');
+			}
+			txt = txt.join(", ");
+			document.getElementById("txtIcon").innerHTML = txt;
+			document.getElementById("txtPicture").innerHTML = txt;
+			document.getElementById("txtButtons").innerHTML = txt;
+		});
+	</script>
+	<table>
+		<thead>
+			<tr>
+				<th style="width: 10%;">Имя</th>
+				<th style="width: 10%;">Тип</th>
+				<th style="width: 30%;">Значения</th>
+				<th>Описание</th>
+			</tr>
+		</thead>
+		<tbody>
+			<tr>
+				<td>icon</td>
+				<td>свойство</td>
+				<td><span id="txtIcon"></span></td>
+				<td>Иконка в верхнем левом углу <b>app-box</b></td>
+			</tr>
+			<tr>
+				<td>title</td>
+				<td>свойство</td>
+				<td><b>text</b> или <b>html</b></td>
+				<td>Строка в заголовке</td>
+			</tr>
+			<tr>
+				<td>image</td>
+				<td>свойство</td>
+				<td>Путь/Имя файла изображения</td>
+				<td>Изображение на всю ширину <b>app-box</b></td>
+			</tr>
+			<tr>
+				<td>picture</td>
+				<td>свойство</td>
+				<td><span id="txtPicture"></span></td>
+				<td>Картинка слева от сообщения</td>
+			</tr>
+			<tr>
+				<td>message</td>
+				<td>свойство</td>
+				<td><b>text</b> или <b>html</b></td>
+				<td>Сообщение</td>
+			</tr>
+			<tr>
+				<td>width</td>
+				<td>свойство</td>
+				<td>"400px" по умолчанию</td>
+				<td>Ширина модального окна</td>
+			</tr>
+			<tr>
+				<td>buttons[]</td>
+				<td>свойство</td>
+				<td><span id="txtButtons"></span></td>
+				<td>Массив имён кнопок внизу модального окна</td>
+			</tr>
+			<tr>
+				<td>fogHides</td>
+				<td>свойство</td>
+				<td><b>false</b> по умолчанию</td>
+				<td>Флаг - закрывать окно при клике по "туману"</td>
+			</tr>
+			<tr>
+				<td>buttonClick(name)</td>
+				<td>событие</td>
+				<td>Передаётся имя кнопки. Кнопка закрытия окна(справа вверху) имеет имя "Exit"</td>
+				<td>Пользователь кликнул по кнопке внизу окна или кнопке закрытия(справа вверху)</td>
+			</tr>
+			<tr>
+				<td>fogClick()</td>
+				<td>событие</td>
+				<td></td>
+				<td>Пользователь кликнул по "туману"</td>
+			</tr>
+			<tr>
+				<td>show()</td>
+				<td>метод</td>
+				<td></td>
+				<td>Показ модального окна с установленными свойствами</td>
+			</tr>
+			<tr>
+				<td>hide()</td>
+				<td>метод</td>
+				<td></td>
+				<td>Скрытие модального окна. <b>app-box</b> сам вызывает этот метод при клике по любой кнопке, а также при клике по туману, если поднят флаг "fogHides"</td>
+			</tr>
+		</tbody>
+	</table>
+	<br>
+	<center><h3>Примеры использования:</h3></center>
+	<br>
+
+	<!--------------------------------------------------------------------------------------------->
+
+	<div id="demoSimple" class="divExample">
+		<button type="button" class="btnLiveDemo" onclick="demoSimple()">Live Demo<br><big>Simple</big></button>
+		<div class="divDescription">
+			Самый простой способ показа app-box
+		</div>
+	</div>
+	<script>
+		function demoSimple() {
+			var aBox = new appBox();
+			aBox.title = "app-box";
+			aBox.message = "Hello, world!";
+			aBox.show();
+		}
+	</script>
+
+	<!--------------------------------------------------------------------------------------------->
+
+	<div id="demoOK" class="divExample">
+		<button type="button" class="btnLiveDemo" onclick="demoOK()">Live Demo<br><big>OK</big></button>
+		<div class="divDescription">
+			Показ с сообщением и заголовком, содержащими HTML теги, и с кнопкой OK
+		</div>
+	</div>
+	<script>
+		function demoOK() {
+			var aBox = new appBox();
+			aBox.icon = "Info";
+			aBox.title = "Hello, <i>world!!!</i>";
+			aBox.picture = "Info";
+			aBox.message = "Africa<br>Antarctica<br>Asia<br>Australia and Oceania<br>Europe<br>North America<br>South America";
+			aBox.buttons = ["OK"];
+			aBox.show();
+		}
+	</script>
+
+	<!--------------------------------------------------------------------------------------------->
+
+	<div id="demoYesNo" class="divExample">
+		<button type="button" class="btnLiveDemo" onclick="demoYesNo()">Live Demo<br><big>Yes No</big></button>
+		<div class="divDescription">
+			Показ сообщения с кнопками Yes, No, иконкой со знаком вопроса и обработчиком события "клик по кнопке"
+		</div>
+	</div>
+	<script>
+		function demoYesNo() {
+			var aBox = new appBox();
+			aBox.icon = "Question";
+			aBox.title = "Hi, world?";
+			aBox.picture = "Question";
+			aBox.message = "Hello, world?";
+			aBox.buttons = ["Yes", "No"];
+			aBox.buttonClick = function (name) {
+				console.log("buttonClick: " + name);
+			}
+			aBox.show();
+		}
+	</script>
+
+	<!--------------------------------------------------------------------------------------------->
+
+	<div id="demoImage" class="divExample">
+		<button type="button" class="btnLiveDemo" onclick="demoImage()">Live Demo<br><big>Image</big></button>
+		<div class="divDescription">
+			Показ app-box с заголовком и изображением, скрытие кликом по туману
+		</div>
+	</div>
+	<script>
+		function demoImage() {
+			var aBox = new appBox();
+			aBox.title = "<b>Duomo di Pisa,</b> <i>Italia</i>";
+			aBox.image = "image_Duomo_di_Pisa_Italia.jpg";
+			aBox.fogHides = true;
+			aBox.show();
+		}
+	</script>
+
+	<!--------------------------------------------------------------------------------------------->
+
+	<div id="demoImageMsg" class="divExample">
+		<button type="button" class="btnLiveDemo" onclick="demoImageMsg()">Live Demo<br><big>Image Message</big></button>
+		<div class="divDescription">
+			Показ app-box шириной 360px, без заголовка, с изображением, сообщением и кнопкой Close
+		</div>
+	</div>
+	<script>
+		function demoImageMsg() {
+			var aBox = new appBox();
+			aBox.image = "image_Buda_Castle_Budapest_Hungary.jpg";
+			aBox.message = "Buda Castle, <i>Budapest, Hungary</i>";
+			aBox.width = "360px";
+			aBox.buttons = ["Close"];
+			aBox.show();
+		}
+	</script>
+
+	<!--------------------------------------------------------------------------------------------->
+
+	<div id="demoAllProperties" class="divExample">
+		<button type="button" class="btnLiveDemo" onclick="demoAllProperties()">Live Demo<br><big>All Properties</big></button>
+		<div class="divDescription">
+			Показ с полным набором свойств и кнопок
+		</div>
+	</div>
+	<script>
+		function demoAllProperties() {
+			var aBox = new appBox();
+			aBox.icon = "Danger";
+			aBox.title = "Khersones";
+			aBox.image = "image_Khersones_Crimea_Ukraine.jpg";
+			aBox.picture = "Danger";
+			aBox.message = "<b>Khersones,</b> <i>Crimea, Ukraine</i>";
+			aBox.width = "440px";
+			aBox.buttons = ["Info", "Question", "Danger", "OK", "Yes", "No", "Trash", "User", "In", "Out", "Save", "Cancel", "Close"];
+			aBox.fogHides = false;
+			aBox.buttonClick = function (name) {
+				console.log("buttonClick: " + name);
+			}
+			aBox.fogClick = function() {
+				console.log("fogClick");
+			}
+			aBox.show();
+		}
+	</script>
+
+	<!--------------------------------------------------------------------------------------------->
+
+	<div id="demoProgress" class="divExample">
+		<button type="button" class="btnLiveDemo" onclick="demoProgress()">Live Demo<br><big>Progress</big></button>
+		<div class="divDescription">
+			Показ с индикатором выполнения
+		</div>
+	</div>
+	<script>
+		function demoProgress() {
+			var aBox = new appBox();
+			aBox.message = '\
+				<div id="progressPC" style="margin-left: 0.2rem; margin-bottom: 0.3rem;"></div>\
+				<div id="progressBar" style="border-radius: 0.3rem; background-color: DodgerBlue; width: 0%; height: 40px;">\
+				</div>\
+			';
+			aBox.show();
+			// Simulating progress with setInterval
+			aBox.pc = 0;
+			aBox.intervalID = window.setInterval(function() {
+				aBox.pc++;
+				document.getElementById("progressPC").innerHTML = aBox.pc + "% to complete";
+				document.getElementById("progressBar").style.width = aBox.pc + "%";
+				if (aBox.pc == 100) {
+					clearInterval(aBox.intervalID);
+					aBox.hide();
+				}
+			}, 25);
+		}
+	</script>
+
+	<!--------------------------------------------------------------------------------------------->
+
+	<div id="demoCustomDel" class="divExample">
+		<button type="button" class="btnLiveDemo" onclick="demoCustomDel()">Live Demo<br><big>Custom Del</big></button>
+		<div class="divDescription">
+			Показ с кастомизацией, без заголовка
+		</div>
+	</div>
+	<script>
+		function demoCustomDel() {
+			var aBox = new appBox();
+			aBox.picture = "Trash";
+			aBox.message = "<big>Delete data?</big><br><small>This action can't be undone.</small>";
+			aBox.buttons = ["Trash", "Cancel"];
+			aBox.buttonClick = function (name) {
+				console.log("buttonClick: " + name);
+			}
+			aBox.show();
+			// Customization (after .show())
+			aBox.elms.footer.style.backgroundColor = "White";
+			aBox.elms.picture.style.minWidth = "2.5rem";
+			aBox.elms.picture.style.color = "Grey";
+		}
+	</script>
+
+	<!--------------------------------------------------------------------------------------------->
+
+	<div id="demoCustomFog" class="divExample">
+		<button type="button" class="btnLiveDemo" onclick="demoCustomFog()">Live Demo<br><big>Custom Fog</big></button>
+		<div class="divDescription">
+			Показ с кастомизацией, скрытие кликом по туману
+		</div>
+	</div>
+	<script>
+		function demoCustomFog() {
+			var aBox = new appBox();
+			aBox.icon = "Save";
+			aBox.title = "app-box";
+			//aBox.image = "";
+			aBox.picture = "Question";
+			aBox.message = "Сохранить введённые данные?";
+			aBox.width = "420px";
+			aBox.buttons = ["Save", "Cancel"];
+			aBox.fogHides = true;
+			aBox.buttonClick = function(name) {
+				console.log("buttonClick: " + name);
+			}
+			aBox.fogClick = function() {
+				console.log("fogClick");
+			}
+			aBox.show();
+			// Customization (after .show())
+			aBox.elms.fog.style.background = "rgba(180, 160, 140, 0.2)";
+			aBox.elms.modal.style.backgroundColor = "AliceBlue";
+			aBox.elms.header.style.backgroundColor = "CadetBlue";
+			aBox.elms.icon.style.minWidth = "2rem";
+			aBox.elms.icon.style.color = "AliceBlue";
+			aBox.elms.title.style.color = "AliceBlue";
+			aBox.elms.exit.style.color = "White";
+			aBox.elms.content.style.padding = "10px 20px";
+			//aBox.elms.image.style.borderRadius = "0";
+			aBox.elms.pictureMessage.style.marginLeft = "10px";
+			aBox.elms.picture.style.minWidth = "4.5rem";
+			aBox.elms.picture.style.color = "CadetBlue";
+			aBox.elms.message.style.fontSize = "1.4rem";
+			aBox.elms.message.style.color = "#22888b";
+			aBox.elms.footer.style.backgroundColor = "#e1f0f5";
+			aBox.elms.buttons.Save.innerHTML = "Сохранить";
+			aBox.elms.buttons.Cancel.innerHTML = "Отмена";
+		}
+	</script>
+
 </body>
 </html>
